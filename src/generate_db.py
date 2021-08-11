@@ -14,20 +14,18 @@ def Resize(image, image_h, is_background):
 def GenerateDataImage(_background, object_lists, object_size, dataset_size):
     global data_count
 
-    objects = []
-    for object_list in object_lists:
-        object_image = Image.open(random.choice(object_list))
-        objects.append(Resize(object_image, object_size, is_background=False))
-        # objects.append(object_image)
         
     for i in range(0, dataset_size):
         background = copy.copy(_background)
-
+        objects = []
+        for object_list in object_lists:
+            object_image = Image.open(random.choice(object_list))
+            objects.append(Resize(object_image, object_size, is_background=False))
         for object in objects:
             object_w, object_h = object.size
             background_w, background_h = background.size
-            offset_w = int(object_w/2) + random.randint(0, background_w-object_w)
-            offset_h = int(object_h/2) + random.randint(0, (background_h-object_h))
+            offset_w = random.randint(0, background_w-object_w)
+            offset_h = random.randint(0, background_h-object_h)
 
             background.paste(object, (offset_w, offset_h), object)
 

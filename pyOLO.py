@@ -7,7 +7,7 @@ from src.background_trimmer import Trim, CheckRequirements
 EXTENSIONS = ["png", "jpg", "jpeg", "bmp"]
 BACKGROUND_SIZE = 608
 OBJECT_SIZE = 96
-DATASET_SIZE = 10
+DATASET_SIZE = 20
 
 if __name__ == "__main__":
     background_paths = []
