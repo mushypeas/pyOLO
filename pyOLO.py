@@ -10,9 +10,9 @@ if __name__ == "__main__":
     background_paths = []
     objects = []
 
-    settings = json.load(open("settings.json","r"))
+    settings = json.load(open("data/settings.json","r"))
 
-    object_list = open("objects.txt", "r").read().splitlines()
+    object_list = open("data/objects.txt", "r").read().splitlines()
 
     for _object in object_list:
         object = {}
