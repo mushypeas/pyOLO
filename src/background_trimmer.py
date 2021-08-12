@@ -1,9 +1,10 @@
 from glob import glob
 from os import system as terminal
-# import cv2 as cv
 
+import time
+import threading
 
-# TODO: give more flexibility to arguments
+image_idx = 0
 
 class BackgroundTrimmer:
     def __init__(self, image_path, bg_color, trim_fuzz, trans_fuzz):
@@ -42,11 +43,19 @@ class BackgroundTrimmer:
             self.ExitByError()
 
     def Trim(self):
-        i = 0
+        global image_idx
+
         for image in self.image_list:
             # print("converting '{}'...".format(image))
-            terminal("convert {} -resize 256 -fuzz {}% -trim -fuzz {}%% -transparent '{}' -trim {}/out/{}.png".format(image, self.trim_fuzz, self.trans_fuzz, self.bg_color, self.image_path, i))
-            i += 1
+            terminal("convert {} -resize 256 -fuzz {}% -trim -fuzz {}%% -transparent '{}' -trim {}/out/{}.png".format(
+                image,
+                self.trim_fuzz,
+                self.trans_fuzz,
+                self.bg_color,
+                self.image_path,
+                image_idx
+            ))
+            image_idx += 1
 
     def ExitByError(self):
         print("======================= BackgroundTrimmer Usage ==================================\n")
@@ -57,22 +66,30 @@ class BackgroundTrimmer:
         print("          ex) python process_images.py ~/Downloads '#FFFFFF' 50 20\n")
         exit()
 
+def PrintLoading(image_count, image_path):
+    global image_idx
+    while image_idx < image_count:
+        print("Converting images from '{}'... [{}/{}]".format(image_path, image_idx+1, image_count), end="\r")
+    print("")
 def CheckRequirements():
     if terminal("type convert") & 0xFF00 != 0:
         print("[ERROR] ImageMagick is not properly installed in your system. Try running:\n")
         print("        sudo apt install imagemagick\n")
         BackgroundTrimmer.ExitByError()
 
-    print("ImageMagick properly installed...\n")
+    print("ImageMagick properly installed.")
 
 def Trim(image_path, bg_color, trim_fuzz, trans_fuzz, extensions):
+    global image_idx
+    image_idx = 1
+    
     trimmer = BackgroundTrimmer(image_path, bg_color, trim_fuzz, trans_fuzz)
 
-    image_num = trimmer.CheckImagePath(extensions)
+    image_count = trimmer.CheckImagePath(extensions)
     trimmer.CheckColor()
     trimmer.CheckFuzz()
 
-    print("Converting {} images from '{}'...".format(image_num, image_path))
+    threading.Thread(target=PrintLoading, args=(image_count, image_path)).start()
 
     if len(glob(image_path + "/out/")) == 0:
         terminal("mkdir {}/out".format(image_path))
