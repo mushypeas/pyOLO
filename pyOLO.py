@@ -27,15 +27,15 @@ if __name__ == "__main__":
         background_paths += glob("backgrounds/*." + extension)
 
     if len(sys.argv) == 1:
-        step = 1
+        step = 0
     else:
         try:
             step = int(sys.argv[1])
         except TypeError:
-            print("Usage: python pyOLO.py <step (1 - 4)>\n")
+            print("Usage: python pyOLO.py <step (0 - 4)>\n")
             exit()
 
-    if step <= 1:
+    if step in [0,1]:
         print("[Step 1] Trimming images")
 
         # remove all previous data
@@ -46,7 +46,7 @@ if __name__ == "__main__":
             Trim(object)
         print("[Step 1] Done.")
 
-    if step <= 2:
+    if step in [0,2]:
         print("[Step 2] Generating Dataset")
 
         # remove all previous data
@@ -55,13 +55,14 @@ if __name__ == "__main__":
         GenerateDB(background_paths, objects, settings["bg_size"], settings["object_size"], settings["dataset_size"])
         print("[Step 2] Done.")
 
-    if step <= 3:
+    if step in [0,3]:
         print("[Step 3] Setup YOLO Environment")
         SetupYOLO()
         print("[Step 3] Done.")
 
-    if step <= 4:
+    if step in [0,4]:
         print("[Step 4] Run YOLO training")
+        terminal("chmod +x ./setup.sh")
         terminal("./setup.sh")
         terminal("darknet/darknet detector train data/obj.data data/obj.cfg darknet/darknet53.conv.74")
         print("[Step 4] Done.")
