@@ -27,7 +27,7 @@ if __name__ == "__main__":
         background_paths += glob("backgrounds/*." + extension)
 
     if len(sys.argv) == 1:
-        step = 0
+        step = 1
     else:
         try:
             step = int(sys.argv[1])
@@ -59,3 +59,9 @@ if __name__ == "__main__":
         print("[Step 3] Setup YOLO Environment")
         SetupYOLO()
         print("[Step 3] Done.")
+
+    if step <= 4:
+        print("[Step 4] Run YOLO training")
+        terminal("./setup.sh")
+        terminal("darknet/darknet detector train data/obj.data data/obj.cfg darknet/darknet53.conv.74")
+        print("[Step 4] Done.")
