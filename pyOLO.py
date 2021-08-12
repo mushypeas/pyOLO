@@ -25,8 +25,17 @@ if __name__ == "__main__":
     # get image paths
     for extension in settings["extensions"]:
         background_paths += glob("backgrounds/*." + extension)
-        
-    if int(sys.argv[1]) <= 1:
+
+    if len(sys.argv) == 1:
+        step = 0
+    else:
+        try:
+            step = int(sys.argv[1])
+        except TypeError:
+            print("Usage: python pyOLO.py <step (1 - 4)>\n")
+            exit()
+
+    if step <= 1:
         print("[Step 1] Trimming images")
 
         # remove all previous data
@@ -37,7 +46,7 @@ if __name__ == "__main__":
             Trim(object)
         print("[Step 1] Done.")
 
-    if int(sys.argv[1]) <= 2:
+    if step <= 2:
         print("[Step 2] Generating Dataset")
 
         # remove all previous data
@@ -46,7 +55,7 @@ if __name__ == "__main__":
         GenerateDB(background_paths, objects, settings["bg_size"], settings["object_size"], settings["dataset_size"])
         print("[Step 2] Done.")
 
-    if int(sys.argv[1]) <= 3:
+    if step <= 3:
         print("[Step 3] Setup YOLO Environment")
         SetupYOLO()
         print("[Step 3] Done.")
