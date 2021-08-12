@@ -32,6 +32,7 @@ pycups==1.9.73
 PyGObject==3.26.1
 pymacaroons==0.13.0
 PyNaCl==1.1.2
+pyrealsense2==2.49.0.3474
 pyRFC3339==1.0
 python-apt==1.6.5+ubuntu0.6
 python-dateutil==2.6.1

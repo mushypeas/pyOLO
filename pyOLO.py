@@ -5,6 +5,7 @@ from os import system as terminal
 
 from src.generate_db import GenerateDB
 from src.image_trimmer import Trim, CheckRequirements
+from src.yolo_setup import SetupYOLO
 
 if __name__ == "__main__":
     background_paths = []
@@ -44,3 +45,8 @@ if __name__ == "__main__":
 
         GenerateDB(background_paths, objects, settings["bg_size"], settings["object_size"], settings["dataset_size"])
         print("[Step 2] Done.")
+
+    if int(sys.argv[1]) <= 3:
+        print("[Step 3] Setup YOLO Environment")
+        SetupYOLO()
+        print("[Step 3] Done.")
