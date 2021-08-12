@@ -1,6 +1,6 @@
 {
     "extensions": ["png","jpg","jpeg","bmp"],
-    "bg_size": [640, 480], // should be multiple of 32
+    "bg_size": [640, 480],
     "object_size": 80,
     "dataset_size": 20
 }

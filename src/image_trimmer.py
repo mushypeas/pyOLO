@@ -1,13 +1,15 @@
+import json
 import requests
-from glob import glob
-from os import system as terminal
-from termcolor import colored
-
-import time
 import threading
 
+from glob import glob
+from termcolor import colored
+from os import system as terminal
+
+
 API_KEY = '60d841675c6eda8e560aab1bbce1653ccd81f105'
-EXTENSIONS = open("extensions.txt", "r").read().splitlines()
+settings = json.load(open("settings.json", "r"))
+extensions = settings["extensions"]
 COLOR_NAMES = open("colors.txt").read().splitlines()
 
 class ImageTrimmer:
@@ -23,12 +25,12 @@ class ImageTrimmer:
         self.image_idx = 0
 
     def CheckImagePath(self):
-        for extension in EXTENSIONS:
+        for extension in extensions:
             self.image_list += glob(self.object_path + "/*" + extension)
 
         if len(self.image_list) == 0:
             print("[ERROR] Invalid directory path '{}', or no images with a valid extension in the given directory.\n".format(self.object_path))
-            print("    Available extensions: {}\n".format(EXTENSIONS))
+            print("    Available extensions: {}\n".format(extensions))
             self.ExitByError()
         self.image_count = len(self.image_list)
 
