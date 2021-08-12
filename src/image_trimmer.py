@@ -8,7 +8,7 @@ from os import system as terminal
 
 
 API_KEY = '60d841675c6eda8e560aab1bbce1653ccd81f105'
-settings = json.load(open("data/settings.json", "r"))
+settings = json.load(open("settings.json", "r"))
 extensions = settings["extensions"]
 COLOR_NAMES = open("data/colors.txt").read().splitlines()
 
