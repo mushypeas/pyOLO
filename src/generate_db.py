@@ -8,12 +8,6 @@ import threading
 data_idx = 0
 data_count = 0
 
-def Resize(image, image_h, is_background):
-    image_w = int(image.size[0]/image.size[1] * image_h)
-    if is_background:
-        image_w -= image_w%32
-    return image.resize((image_w, image_h))
-
 def GenerateData(_background, object_data_list, object_size, dataset_size):
     global data_idx
 
@@ -25,7 +19,7 @@ def GenerateData(_background, object_data_list, object_size, dataset_size):
         for object_data in object_data_list:
             object_class = object_data[0]
             object_file = random.choice(object_data[1])
-            object_image = Resize(Image.open(object_file), object_size, is_background=False)
+            object_image = Image.open(object_file).resize((object_size, object_size))
             objects.append({"class": object_class, "image": object_image})
 
         for object in objects:
@@ -62,7 +56,7 @@ def PrintLoading():
     while data_idx < data_count:
         print("Generating Data... [{}/{}]".format(data_idx+1, data_count), end="\r")
 
-def GenerateDB(background_paths, objects, background_size, object_size, dataset_size):
+def GenerateDB(background_paths, objects, bg_size, object_size, dataset_size):
     global data_count, data_idx
 
     print("Loading Images...")
@@ -70,7 +64,7 @@ def GenerateDB(background_paths, objects, background_size, object_size, dataset_
     # load resized backgrounds
     backgrounds = []
     for background_path in background_paths:
-        background = Resize(Image.open(background_path), background_size, is_background=True)
+        background = Image.open(background_path).resize(bg_size)
         backgrounds.append(background)
 
     data_count = len(backgrounds) * dataset_size

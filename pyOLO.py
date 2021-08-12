@@ -1,17 +1,16 @@
 import sys
+import json
 from glob import glob
 from os import system as terminal
 
 from src.generate_db import GenerateDB
 from src.image_trimmer import Trim, CheckRequirements
 
-BACKGROUND_SIZE = 608
-OBJECT_SIZE = 96
-DATASET_SIZE = 5
-
 if __name__ == "__main__":
     background_paths = []
     objects = []
+
+    settings = json.load(open("settings.json","r"))
 
     extensions = open("extensions.txt", "r").read().splitlines()
     settings_list = open("settings.txt", "r").read().splitlines()
@@ -44,5 +43,5 @@ if __name__ == "__main__":
         # remove all previous data
         terminal("rm -rf images/*/*.png images/*/*.txt")
 
-        GenerateDB(background_paths, objects, BACKGROUND_SIZE, OBJECT_SIZE, DATASET_SIZE)
+        GenerateDB(background_paths, objects, settings["bg_size"], settings["object_size"], settings["dataset_size"])
         print("[Step 2] Done.")
