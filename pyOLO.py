@@ -50,7 +50,7 @@ if __name__ == "__main__":
         print("[Step 2] Generating Dataset")
 
         # remove all previous data
-        terminal("rm -rf images/*/*.png images/*/*.txt")
+        terminal("rm -rf data/*/images/*.png data/*/labels/*.txt")
 
         GenerateDB(background_paths, objects, settings["bg_size"], settings["object_size"], settings["dataset_size"])
         print("[Step 2] Done.")

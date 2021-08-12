@@ -15,31 +15,42 @@ def SetupYOLO():
     obj_data = open("data/obj.data", "w")
     class_num = len(objects)
     obj_data.write(f"classes= {class_num}\n")
-    obj_data.write("train  = ../data/train.txt\nvalid  = ../data/test.txt\nnames  = ../data/obj.names\nbackup = backup/\n")
+    obj_data.write("train  = data/train.txt\nvalid  = data/test.txt\nnames  = data/obj.names\nbackup = backup/\n")
     obj_data.close()
 
     # write data/test.txt
     test_txt = open("data/test.txt", "w")
-    test_images = glob("images/test/*.png")
+    test_images = glob("data/test/images/*.png")
     for test_image in test_images:
         test_txt.write(test_image + "\n")
     test_txt.close()
 
     # write data/train.txt
     train_txt = open("data/train.txt", "w")
-    train_images = glob("images/train/*.png")
+    train_images = glob("data/train/images/*.png")
     for train_image in train_images:
         train_txt.write(train_image + "\n")
     train_txt.close()
+
+    # write darknet/Makefile
+    makefile_lines = open("darknet/_Makefile", "r").readlines()
+    makefile = open("darknet/Makefile", "w")
+    makefile_lines[0] = f"GPU={settings['GPU']}\n"
+    makefile_lines[2] = f"OPENCV={settings['OPENCV']}\n"
+    makefile.writelines(makefile_lines)
+    makefile.close()
 
     # write data/yolov3.cfg
     cfg_lines = open("data/yolov3.cfg", "r").readlines()
     obj_cfg = open("data/obj.cfg", "w")
     filter_num = (class_num+5)*3
+    max_batches = max(class_num, 2)*2000
+    step1 = int(max_batches*0.8)
+    step2 = int(max_batches*0.9)
     cfg_lines[7]   = f"width={settings['bg_size'][0]}\n"
     cfg_lines[8]   = f"height={settings['bg_size'][1]}\n"
-    cfg_lines[19]  = f"max_batches={class_num*4000}\n"
-    cfg_lines[21]  = f"steps={class_num*1600},{class_num*1800}\n"
+    cfg_lines[19]  = f"max_batches={max_batches}\n"
+    cfg_lines[21]  = f"steps={step1},{step2}\n"
     cfg_lines[602] = f"filters={filter_num}\n"
     cfg_lines[609] = f"classes={class_num}\n"
     cfg_lines[688] = f"filters={filter_num}\n"

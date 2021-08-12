@@ -1,4 +1,3 @@
-*
-!.gitignore
-!colors.txt
-!yolov.cfg
+obj.*
+test.txt
+train.txt

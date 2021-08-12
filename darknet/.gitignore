@@ -19,6 +19,7 @@ cfg/
 darknet
 .fuse*
 libdarknet.*
+Makefile
 
 # OS Generated #
 .DS_Store*

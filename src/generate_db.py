@@ -19,7 +19,8 @@ def GenerateData(_background, object_data_list, object_size, dataset_size):
         for object_data in object_data_list:
             object_class = object_data[0]
             object_file = random.choice(object_data[1])
-            object_image = Image.open(object_file).resize((object_size, object_size))
+            object_image = Image.open(object_file)
+            object_image = object_image.resize((int(object_image.size[0]/object_image.size[1]*object_size), object_size)) 
             objects.append({"class": object_class, "image": object_image})
 
         for object in objects:
@@ -39,16 +40,16 @@ def GenerateData(_background, object_data_list, object_size, dataset_size):
 
         # ~80% of the data is used for training
         if i / dataset_size < 0.8:
-            data_text = open("images/train/{}.txt".format(data_idx), "w")
+            data_text = open("data/train/labels/{}.txt".format(data_idx), "w")
             data_text.write(YOLO_txt)
             data_text.close()
-            data_image.save("images/train/{}.png".format(data_idx))
+            data_image.save("data/train/images/{}.png".format(data_idx))
         # rest of the data is used for testing
         else:
-            data_text = open("images/test/{}.txt".format(data_idx), "w")
+            data_text = open("data/test/labels/{}.txt".format(data_idx), "w")
             data_text.write(YOLO_txt)
             data_text.close()
-            data_image.save("images/test/{}.png".format(data_idx))
+            data_image.save("data/test/images/{}.png".format(data_idx))
 
         data_idx += 1
 
