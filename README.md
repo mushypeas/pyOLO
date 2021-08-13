@@ -40,6 +40,30 @@ Now, simply running `pyolo` on your terminal will activate your virtual environm
 ```
 pip install -r requirements.txt
 ```
-(TODO)
 ### 1. Preparing Images
+- Take Pictures of Background Images
+(TODO)
+- Take Pictures of Object Images
+(TODO)
+- Import Background Images to Project
+Move the background images to `pyOLO/backgrounds`.
+- Import Object Images to Project
+Move the images of an object in a **directory named as the object's YOLO class name**, and move those directories into `pyOLO/objects`. The name of the images doesn't matter. For example, if you want to train YOLO to recognize a dog and a tuna can, the hierarchy would be as follows:
+```
+pyOLO
+├── objects
+│   ├── dog
+│   │   ├── firstdog.png
+│   │   ├── second_dog.jpg
+│   │   ├── ...
+│   │   └── lastdog.png
+│   └── tuna can
+│       ├── tuna01.png
+│       ├── tuunatwo.jpg
+│       ├── ...
+│       └── finalTunaCan.png
+├── ...
+```
+... And your all set!
+
 ### 2. Running pyOLO
