@@ -100,6 +100,8 @@ Before runnung pyOLO, you'll have to edit `pyOLO/settings.json`.
   - **object_size:** Object's height in pixels. The ratio of the image is conserved.
   - **dataset_size:** Generated YOLO dataset per background. YOLO would train & test with `<dataset_size> * <number of background images>`.
   - **compile_options:** Compilation options for YOLO darknet. Use only if you satisfied the requirements.
+
+  
 If it's the first time running pyOLO, just run
 ```
 python pyOLO.py
