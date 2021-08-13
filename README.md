@@ -67,3 +67,41 @@ pyOLO
 ... And your all set!
 
 ### 2. Running pyOLO
+
+*Dont forget to activate the virtual environment!
+Before runnung pyOLO, you'll have to edit `pyOLO/settings.json`.
+```json
+# settings.json
+{
+    "extensions": [ "png", "jpg", "jpeg", "bmp" ],
+    "bg_size": [640, 480],
+    "objects": [
+        "dog qa"
+        "tuna can"
+        "water bottle s"
+    ],
+    "object_size": 80,
+    "dataset_size": 5,
+    "compile_options": {
+        "GPU": 1,
+        "CUDNN": 1,
+        "CUDNN_HALF": 1,
+        "OPENCV": 1
+    }
+}
+```
+  - **extensions:** `[ext1, ext2, ...]`The allowed extensions of background/object images. Mostly you would't need to change this.
+  - **bg_size:** `[width, height]` Resolution of the background image in pixels. 
+  - **objects:** `["<object name> <mode>", ...]` List of objects & trimming mode for each object to train. If the mode isn't given, mode is set to `qa`.
+    - Trimming modes
+      - `qa`: Quick Automated Trimming mode. Fast, but only works with white backgrounded images. Currently working on it...
+      - `qm`: Quick Manual Trimming mode(Not recommended).
+      - `s`: Slow Trimming mode. Accurate, but takes 5-8 seconds per image.
+  - **object_size:** Object's height in pixels. The ratio of the image is conserved.
+  - **dataset_size:** Generated YOLO dataset per background. YOLO would train & test with `<dataset_size> * <number of background images>`.
+  - **compile_options:** Compilation options for YOLO darknet. Use only if you satisfied the requirements.
+If it's the first time running pyOLO, just run
+```
+python pyOLO.py
+```
+from the project root directory.
