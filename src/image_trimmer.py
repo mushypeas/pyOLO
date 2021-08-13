@@ -148,11 +148,11 @@ class ImageTrimmer:
         if len(glob(self.object_path + "/temp/")) == 0:
             terminal("mkdir {}/temp".format(self.object_path))
 
-        if self.mode == "qa" or self.mode == "q":
+        if self.mode == "q":
             print(" - Quick Auto trimming mode - ")
             self.QuickAutoTrim()
         elif self.mode == "qm":
-            print(" - Quick manual trimming mode - ")
+            print(" - Quick Manual trimming mode - ")
             self.QuickManualTrim()
         elif self.mode == "s":
             print(" - Slow API trimming mode - ")

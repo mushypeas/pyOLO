@@ -94,7 +94,7 @@ Before runnung pyOLO, you'll have to edit `pyOLO/settings.json`.
   - **bg_size:** `[width, height]` Resolution of the background image in pixels. 
   - **objects:** `["<object name> <mode>", ...]` List of objects & trimming mode for each object to train. If the mode isn't given, mode is set to `qa`.
     - Trimming modes
-      - `qa`: Quick Automated Trimming mode. Fast, but only works with white backgrounded images. Currently working on it...
+      - `q`: Quick Automated Trimming mode. Fast, but only works with white backgrounded images. Currently working on it...
       - `qm`: Quick Manual Trimming mode(Not recommended).
       - `s`: Slow Trimming mode. Accurate, but takes 5-8 seconds per image.
   - **object_size:** Object's height in pixels. The ratio of the image is conserved.

@@ -14,11 +14,16 @@ if __name__ == "__main__":
     settings = json.load(open("settings.json","r"))
 
 
-    for _object in settings["objects"]:
+    for object_name in settings["objects"]:
         object = {}
-        object["name"] = _object.split(" ")[0]
+        name_end = object_name.split(" ")[-1]
+        if name_end in ["q", "qm", "s"]:
+            object["name"] = object_name.replace(f" {name_end}", "")
+            object["mode"] =  object_name.split(" ")[-1]
+        else:
+            object["name"] = object_name
+            object["mode"] = "q"
         object["path"] = f"objects/{object['name']}"
-        object["mode"] =  _object.split(" ")[1]
         objects.append(object)
         
     # get image paths

@@ -2,7 +2,7 @@
     "extensions": [ "png", "jpg", "jpeg", "bmp" ],
     "bg_size": [640, 480],
     "objects": [
-        "dog q"
+        "dog"
     ],
     "object_size": 80,
     "dataset_size": 5,
