@@ -90,5 +90,5 @@ def SetupYOLO():
         cache_file = open("cache.json","w")
     if is_changed:
         cache_file.seek(0)
-        json.dump(cmp_options, cache_file, indent=4)
-        terminal("make -C darknet")
+        if terminal("make -C darknet") == 0:
+            json.dump(cmp_options, cache_file, indent=4)

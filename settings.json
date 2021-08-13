@@ -7,9 +7,9 @@
     "object_size": 80,
     "dataset_size": 5,
     "compile_options": {
-        "GPU": 1,
-        "CUDNN": 1,
-        "CUDNN_HALF": 1,
-        "OPENCV": 1
+        "GPU": 0,
+        "CUDNN": 0,
+        "CUDNN_HALF": 0,
+        "OPENCV": 0
     }
 }
