@@ -1,2 +1,4 @@
 *.pyc
 *.conv.*
+*.png
+cache.json

@@ -13,9 +13,8 @@ if __name__ == "__main__":
 
     settings = json.load(open("settings.json","r"))
 
-    object_list = open("objects.txt", "r").read().splitlines()
 
-    for _object in object_list:
+    for _object in settings["objects"]:
         object = {}
         object["name"] = _object.split(" ")[0]
         object["path"] = f"objects/{object['name']}"
@@ -31,10 +30,17 @@ if __name__ == "__main__":
     else:
         try:
             step = int(sys.argv[1])
-        except TypeError:
-            print("Usage: python pyOLO.py <step (0 - 4)>\n")
+            if step < 1 or step > 4:
+                raise ValueError
+        except ValueError:
+            print("Usage 1: python pyOLO.py              <= Run whole process")
+            print("Usage 2: python pyOLO.py <step(1-4)>  <= Run single step\n")
+            print("    [Step 1] Trimming images")
+            print("    [Step 2] Generating Dataset")
+            print("    [Step 3] Setup YOLO Environment")
+            print("    [Step 4] Run YOLO training\n")
             exit()
-
+        
     if step in [0,1]:
         print("[Step 1] Trimming images")
 
@@ -50,7 +56,7 @@ if __name__ == "__main__":
         print("[Step 2] Generating Dataset")
 
         # remove all previous data
-        terminal("rm -rf data/*/images/*.png data/*/labels/*.txt")
+        terminal("rm -rf data/*/*.png data/*/*.txt")
 
         GenerateDB(background_paths, objects, settings["bg_size"], settings["object_size"], settings["dataset_size"])
         print("[Step 2] Done.")
@@ -62,5 +68,9 @@ if __name__ == "__main__":
 
     if step in [0,4]:
         print("[Step 4] Run YOLO training")
-        terminal("darknet/darknet detector train data/obj.data data/obj.cfg darknet/darknet19_448.conv.23")
+        weights = glob("darknet/backup/*.weights")
+        if len(weights) > 0:
+            terminal(f"darknet/darknet detector train data/obj.data data/obj.cfg {weights[0]}")
+        else:
+            terminal("darknet/darknet detector train data/obj.data data/obj.cfg darknet/darknet19_448.conv.23")
         print("[Step 4] Done.")

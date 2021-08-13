@@ -1,20 +1,22 @@
 import json
+import time
 from glob import glob
-from os import system as terminal
 
+import subprocess
+from os import system as terminal
 def SetupYOLO():
-    objects = open("objects.txt","r").read().splitlines()
-    settings = json.load(open("settings.json","r"))
+    settings = json.load(open("settings.json","r")) 
+    cmp_options = settings['compile_options']
 
     # write data/obj.names
     obj_names = open("data/obj.names", "w")
-    for object in objects:
+    for object in settings["objects"]:
         obj_names.write(object.split(" ")[0])
     obj_names.close()
 
     # write data/obj.data
     obj_data = open("data/obj.data", "w")
-    class_num = len(objects)
+    class_num = len(settings["objects"])
     obj_data.write(f"classes= {class_num}\n")
     obj_data.write("train  = data/train.txt\nvalid  = data/test.txt\nnames  = data/obj.names\nbackup = backup/\n")
     obj_data.close()
@@ -36,10 +38,10 @@ def SetupYOLO():
     # write darknet/Makefile
     makefile_lines = open("darknet/_Makefile", "r").readlines()
     makefile = open("darknet/Makefile", "w")
-    makefile_lines[0] = f"GPU={settings['GPU']}\n"
-    makefile_lines[1] = f"CUDNN={settings['CUDNN']}\n"
-    makefile_lines[2] = f"CUDNN_HALF={settings['CUDNN_HALF']}\n"
-    makefile_lines[3] = f"OPENCV={settings['OPENCV']}\n"
+    makefile_lines[0] = f"GPU={cmp_options['GPU']}\n"
+    makefile_lines[1] = f"CUDNN={cmp_options['CUDNN']}\n"
+    makefile_lines[2] = f"CUDNN_HALF={cmp_options['CUDNN_HALF']}\n"
+    makefile_lines[3] = f"OPENCV={cmp_options['OPENCV']}\n"
     makefile.writelines(makefile_lines)
     makefile.close()
 
@@ -55,7 +57,6 @@ def SetupYOLO():
     cfg_lines[4]   = f"width={settings['bg_size'][0]}\n"
     cfg_lines[223] = f"filters={filter_num}\n"
     cfg_lines[229] = f"classes={class_num}\n"
-
 
     # pjreddie version
 
@@ -77,5 +78,17 @@ def SetupYOLO():
     obj_cfg.writelines(cfg_lines)
     obj_cfg.close()
 
-    terminal("chmod +x ./setup.sh")
-    terminal("./setup.sh")
+    is_changed = False
+    try:
+        cache_file = open("cache.json","r+")
+        cache = json.load(cache_file)
+        for option in dict(cmp_options):
+            if cmp_options[option] != cache[option]:
+                is_changed = True
+    except FileNotFoundError:
+        is_changed = True
+        cache_file = open("cache.json","w")
+    if is_changed:
+        cache_file.seek(0)
+        json.dump(cmp_options, cache_file, indent=4)
+        # terminal("make -C darknet")

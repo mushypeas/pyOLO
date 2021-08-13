@@ -1,10 +1,15 @@
 {
-    "extensions": ["png","jpg","jpeg","bmp"],
+    "extensions": [ "png", "jpg", "jpeg", "bmp" ],
     "bg_size": [640, 480],
+    "objects": [
+        "dog q"
+    ],
     "object_size": 80,
-    "dataset_size": 20,
-    "GPU": 1,
-    "CUDNN": 1,
-    "CUDNN_HALF": 1,
-    "OPENCV": 1
+    "dataset_size": 5,
+    "compile_options": {
+        "GPU": 1,
+        "CUDNN": 1,
+        "CUDNN_HALF": 1,
+        "OPENCV": 1
+    }
 }
