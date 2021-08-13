@@ -18,7 +18,7 @@ def SetupYOLO():
     obj_data = open("data/obj.data", "w")
     class_num = len(settings["objects"])
     obj_data.write(f"classes= {class_num}\n")
-    obj_data.write("train  = data/train.txt\nvalid  = data/test.txt\nnames  = data/obj.names\nbackup = backup/\n")
+    obj_data.write("train  = data/train.txt\nvalid  = data/test.txt\nnames  = data/obj.names\nbackup = backup\n")
     obj_data.close()
 
     # write data/test.txt
@@ -91,4 +91,4 @@ def SetupYOLO():
     if is_changed:
         cache_file.seek(0)
         json.dump(cmp_options, cache_file, indent=4)
-        # terminal("make -C darknet")
+        terminal("make -C darknet")

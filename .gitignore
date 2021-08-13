@@ -2,3 +2,4 @@
 *.conv.*
 *.png
 cache.json
+bad.list
