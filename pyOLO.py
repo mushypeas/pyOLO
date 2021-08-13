@@ -62,7 +62,5 @@ if __name__ == "__main__":
 
     if step in [0,4]:
         print("[Step 4] Run YOLO training")
-        terminal("chmod +x ./setup.sh")
-        terminal("./setup.sh")
-        terminal("darknet/darknet detector train data/obj.data data/obj.cfg darknet/darknet53.conv.74")
+        terminal("darknet/darknet detector train data/obj.data data/obj.cfg darknet/darknet19_448.conv.23")
         print("[Step 4] Done.")

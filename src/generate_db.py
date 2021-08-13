@@ -40,16 +40,16 @@ def GenerateData(_background, object_data_list, object_size, dataset_size):
 
         # ~80% of the data is used for training
         if i / dataset_size < 0.8:
-            data_text = open("data/train/labels/{}.txt".format(data_idx), "w")
+            data_text = open("data/train/{}.txt".format(data_idx), "w")
             data_text.write(YOLO_txt)
             data_text.close()
-            data_image.save("data/train/images/{}.png".format(data_idx))
+            data_image.save("data/train/{}.png".format(data_idx))
         # rest of the data is used for testing
         else:
-            data_text = open("data/test/labels/{}.txt".format(data_idx), "w")
+            data_text = open("data/test/{}.txt".format(data_idx), "w")
             data_text.write(YOLO_txt)
             data_text.close()
-            data_image.save("data/test/images/{}.png".format(data_idx))
+            data_image.save("data/test/{}.png".format(data_idx))
 
         data_idx += 1
 

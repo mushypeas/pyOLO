@@ -1,9 +1,7 @@
 cd darknet
 make
-FILE=darknet53.conv.74
-if [ -f "$FILE" ]; then
-    echo "$FILE already exists."
-else
-    wget https://pjreddie.com/media/files/darknet53.conv.74
+FILE=darknet19_448.conv.23
+if [ ! -f "$FILE" ]; then
+    wget http://pjreddie.com/media/files/darknet19_448.conv.23
 fi
 cd ..

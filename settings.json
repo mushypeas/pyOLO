@@ -4,5 +4,7 @@
     "object_size": 80,
     "dataset_size": 20,
     "GPU": 1,
-    "OPENCV": 0
+    "CUDNN": 1,
+    "CUDNN_HALF": 1,
+    "OPENCV": 1
 }
