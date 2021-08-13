@@ -3,6 +3,7 @@
 ## Introduction
 pyOLO is a tool written in Python that helps users train their data with YOLO easily. All you need is some initial setup and your images for training! This project cotains a darknet model cloned from:
 `https://github.com/AlexeyAB/darknet.git`
+
 Currently pyOLO mainly consists of 4 steps:
 - Step 1: Trimming Images
 - Step 2: Generating Dataset
