@@ -86,7 +86,7 @@ def SetupYOLO():
             if cmp_options[option] != cache[option]:
                 is_changed = True
     except FileNotFoundError:
-        if terminal("wget http://pjreddie.com/media/files/darknet19_448.conv.23") == 0:
+        if terminal("wget http://pjreddie.com/media/files/darknet19_448.conv.23 -P darknet/") == 0:
             is_changed = True
             cache_file = open("cache.json","w")
         else:
