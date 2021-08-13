@@ -86,9 +86,16 @@ def SetupYOLO():
             if cmp_options[option] != cache[option]:
                 is_changed = True
     except FileNotFoundError:
-        is_changed = True
-        cache_file = open("cache.json","w")
+        if terminal("wget http://pjreddie.com/media/files/darknet19_448.conv.23") == 0:
+            is_changed = True
+            cache_file = open("cache.json","w")
+        else:
+            print("[ERROR] Failed to fetch training weights. Check for network issues.")
+            exit()
     if is_changed:
         cache_file.seek(0)
         if terminal("make -C darknet") == 0:
             json.dump(cmp_options, cache_file, indent=4)
+        else:
+            print("[ERROR] Failed to compile darknet. Check the log for details.")
+            exit()
