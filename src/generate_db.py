@@ -25,21 +25,18 @@ def GenerateData(_background, object_data_list, dataset_size):
             object_h = int(background_h / random.uniform(3.0, 10.0))
             object_w = int(object_image.size[0] / object_image.size[1] * object_h)
             object_image = object_image.resize((object_w, object_h)) 
-            objects.append({"class": object_class, "image": object_image})
 
-        for object in objects:
             # make data image
-            object_w, object_h = object["image"].size
             offset_w = random.randint(0, background_w-object_w)
             offset_h = random.randint(0, background_h-object_h)
-            data_image.paste(object["image"], (offset_w, offset_h), object["image"])
+            data_image.paste(object_image, (offset_w, offset_h), object_image)
 
             # make data txt
             x_center = round(((offset_w + int(object_w/2)) / background_w), 4)
             y_center = round(((offset_h + int(object_h/2)) / background_h), 4)
             YOLO_width = round((object_w / background_w), 4)
             YOLO_height = round((object_h / background_h), 4)
-            YOLO_txt += "{} {} {} {} {}\n".format(object["class"], x_center, y_center, YOLO_width, YOLO_height)
+            YOLO_txt += "{} {} {} {} {}\n".format(object_class, x_center, y_center, YOLO_width, YOLO_height)
 
         # ~80% of the data is used for training
         if i / dataset_size < 0.8:
