@@ -4,7 +4,6 @@
     "objects": [
         "dog"
     ],
-    "object_size": 80,
     "dataset_size": 5,
     "compile_options": {
         "GPU": 0,

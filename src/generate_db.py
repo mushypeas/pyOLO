@@ -8,11 +8,12 @@ import threading
 data_idx = 0
 data_count = 0
 
-def GenerateData(_background, object_data_list, object_size, dataset_size):
+def GenerateData(_background, object_data_list, dataset_size):
     global data_idx
 
     for i in range(0, dataset_size):
         data_image = copy(_background)
+        background_w, background_h = data_image.size
         objects = []
         YOLO_txt = ""
 
@@ -21,13 +22,14 @@ def GenerateData(_background, object_data_list, object_size, dataset_size):
             object_file = random.choice(object_data[1])
             object_image = Image.open(object_file)
             object_image = ImageEnhance.Brightness(object_image).enhance(random.uniform(0.5, 1.5))
-            object_image = object_image.resize((int(object_image.size[0]/object_image.size[1]*object_size), object_size)) 
+            object_h = int(background_h / random.uniform(3.0, 10.0))
+            object_w = int(object_image.size[0] / object_image.size[1] * object_h)
+            object_image = object_image.resize((object_w, object_h)) 
             objects.append({"class": object_class, "image": object_image})
 
         for object in objects:
             # make data image
             object_w, object_h = object["image"].size
-            background_w, background_h = data_image.size
             offset_w = random.randint(0, background_w-object_w)
             offset_h = random.randint(0, background_h-object_h)
             data_image.paste(object["image"], (offset_w, offset_h), object["image"])
@@ -58,7 +60,7 @@ def PrintLoading():
     while data_idx < data_count:
         print("Generating Data... [{}/{}]".format(data_idx+1, data_count), end="\r")
 
-def GenerateDB(background_paths, objects, bg_size, object_size, dataset_size):
+def GenerateDB(background_paths, objects, bg_size, dataset_size):
     global data_count, data_idx
 
     print("Loading Images...")
@@ -88,5 +90,5 @@ def GenerateDB(background_paths, objects, bg_size, object_size, dataset_size):
     threading.Thread(target=PrintLoading).start()
 
     for background in backgrounds:
-        GenerateData(background, object_data_list, object_size, dataset_size)
+        GenerateData(background, object_data_list, dataset_size)
     print("")

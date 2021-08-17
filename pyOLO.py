@@ -63,7 +63,7 @@ if __name__ == "__main__":
         # remove all previous data
         terminal("rm -rf data/*/*.png data/*/*.txt")
 
-        GenerateDB(background_paths, objects, settings["bg_size"], settings["object_size"], settings["dataset_size"])
+        GenerateDB(background_paths, objects, settings["bg_size"], settings["dataset_size"])
         print("[Step 2] Done.")
 
     if step in [0,3]:
