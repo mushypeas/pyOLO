@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageEnhance
 from glob import glob
 from copy import copy
 
@@ -20,6 +20,7 @@ def GenerateData(_background, object_data_list, object_size, dataset_size):
             object_class = object_data[0]
             object_file = random.choice(object_data[1])
             object_image = Image.open(object_file)
+            object_image = ImageEnhance.Brightness(object_image).enhance(random.uniform(0.5, 1.5))
             object_image = object_image.resize((int(object_image.size[0]/object_image.size[1]*object_size), object_size)) 
             objects.append({"class": object_class, "image": object_image})
 
