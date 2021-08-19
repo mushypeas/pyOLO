@@ -1,3 +1,4 @@
+# https://github.com/danielgatis/rembg
 from rembg.bg import remove
 import numpy as np
 import io
