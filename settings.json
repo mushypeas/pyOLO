@@ -1,7 +1,7 @@
 {
     "extensions": [ "png", "jpg", "jpeg", "bmp", "JPG"],
     "bg_size": [640, 480],
-    "dataset_size": 50,
+    "dataset_size": 20,
     "threads": 8,
     "compile_options": {
         "GPU": 1,

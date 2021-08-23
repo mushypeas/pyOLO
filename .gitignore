@@ -8,6 +8,7 @@
 *(copy)
 cache.json
 bad.list
+settings.json
 
 # PyCharm
 .idea
