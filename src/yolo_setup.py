@@ -11,7 +11,7 @@ def SetupYOLO():
     # write data/obj.names
     obj_names = open("data/obj.names", "w")
     for object in settings["objects"]:
-        obj_names.write(object.split(" ")[0])
+        obj_names.write(f"{object}\n")
     obj_names.close()
 
     # write data/obj.data
