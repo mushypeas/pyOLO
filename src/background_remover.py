@@ -10,10 +10,10 @@ from rembg.bg import remove
 from PIL import Image, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-IMAGE_SIZE = 320
-THREADS = 8
 settings = json.load(open("settings.json", "r"))
-extensions = settings["extensions"]
+EXTENSIONS = settings["extensions"]
+THREADS = settings["threads"]
+IMAGE_SIZE = 320
 
 class BackgroundRemover:
     def __init__(self, object):
@@ -24,20 +24,20 @@ class BackgroundRemover:
         self.image_idx = 0
 
     def CheckImagePath(self):
-        for extension in extensions:
+        for extension in EXTENSIONS:
             self.image_paths += glob(self.object_path + "/*" + extension)
 
         if len(self.image_paths) == 0:
             print(f"[ERROR] Invalid directory path '{self.object_path}', or no images with a valid extension in the given directory.\n")
-            print(f"    Available extensions: {extensions}\n")
+            print(f"    Available extensions: {EXTENSIONS}\n")
             exit()
         self.image_count = len(self.image_paths)
 
     def _RemoveBackground(self, image_idx):
         if self.image_idx >= self.image_count:
             exit()
-        for index in range(image_idx, self.image_count, THREADS):
-            image_path = self.image_paths[index]
+        for idx in range(image_idx, self.image_count, THREADS):
+            image_path = self.image_paths[idx]
             image = Image.open(image_path)
             image_ratio = image.size[0] / image.size[1]
             image = image.resize((int(image_ratio*IMAGE_SIZE), IMAGE_SIZE))

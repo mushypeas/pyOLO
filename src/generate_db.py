@@ -1,61 +1,70 @@
+import json
+import random
+import threading
+
 from PIL import Image, ImageEnhance
 from glob import glob
 from copy import copy
 
-import random
-import threading
-
 data_idx = 0
 data_count = 0
+settings = json.load(open("settings.json", "r"))
+THREADS = settings["threads"]
 
-def GenerateData(_background, object_data_list, dataset_size):
+def GenerateData(init_idx, backgrounds, object_data_list, dataset_size):
     global data_idx
 
-    for i in range(0, dataset_size):
-        data_image = copy(_background)
-        background_w, background_h = data_image.size
-        objects = []
-        YOLO_txt = ""
+    for bg_idx in range(init_idx, len(backgrounds), THREADS):
+        for i in range(0, dataset_size):
+            data_image = copy(backgrounds[bg_idx])
+            background_w, background_h = data_image.size
+            objects = []
+            YOLO_txt = ""
 
-        for object_data in object_data_list:
-            object_class = object_data[0]
-            object_file = random.choice(object_data[1])
-            object_image = Image.open(object_file)
-            object_image = ImageEnhance.Brightness(object_image).enhance(random.uniform(0.5, 1.5))
-            object_h = int(background_h / random.uniform(3.0, 10.0))
-            object_w = int(object_image.size[0] / object_image.size[1] * object_h)
-            object_image = object_image.resize((object_w, object_h)) 
+            for object_data in object_data_list:
+                object_class = object_data[0]
+                object_file = random.choice(object_data[1])
+                object_image = Image.open(object_file)
 
-            # make data image
-            offset_w = random.randint(0, background_w-object_w)
-            offset_h = random.randint(0, background_h-object_h)
-            data_image.paste(object_image, (offset_w, offset_h), object_image)
+                # process chosen object image
+                object_image = ImageEnhance.Brightness(object_image).enhance(random.uniform(0.5, 1.5))
+                object_image = object_image.rotate(random.uniform(0.0, 360.0), expand=True, resample=Image.BICUBIC)
+                object_image = object_image.crop(object_image.getbbox())
+                object_h = int(background_h / random.uniform(3.0, 10.0))
+                object_w = int(object_image.size[0] / object_image.size[1] * object_h)
+                object_image = object_image.resize((object_w, object_h)) 
 
-            # make data txt
-            x_center = round(((offset_w + int(object_w/2)) / background_w), 4)
-            y_center = round(((offset_h + int(object_h/2)) / background_h), 4)
-            YOLO_width = round((object_w / background_w), 4)
-            YOLO_height = round((object_h / background_h), 4)
-            YOLO_txt += "{} {} {} {} {}\n".format(object_class, x_center, y_center, YOLO_width, YOLO_height)
+                # make data image
+                offset_w = random.randint(0, background_w-object_w)
+                offset_h = random.randint(0, background_h-object_h)
+                data_image.paste(object_image, (offset_w, offset_h), object_image)
 
-        # ~80% of the data is used for training
-        if i / dataset_size < 0.8:
-            data_text = open("data/train/{}.txt".format(data_idx), "w")
-            data_text.write(YOLO_txt)
-            data_text.close()
-            data_image.save("data/train/{}.png".format(data_idx))
-        # rest of the data is used for testing
-        else:
-            data_text = open("data/test/{}.txt".format(data_idx), "w")
-            data_text.write(YOLO_txt)
-            data_text.close()
-            data_image.save("data/test/{}.png".format(data_idx))
+                # make data txt
+                x_center = round(((offset_w + int(object_w/2)) / background_w), 4)
+                y_center = round(((offset_h + int(object_h/2)) / background_h), 4)
+                YOLO_width = round((object_w / background_w), 4)
+                YOLO_height = round((object_h / background_h), 4)
+                YOLO_txt += "{} {} {} {} {}\n".format(object_class, x_center, y_center, YOLO_width, YOLO_height)
 
-        data_idx += 1
+            # ~80% of the data is used for training
+            if i / dataset_size < 0.8:
+                data_text = open("data/train/{}.txt".format(data_idx), "w")
+                data_text.write(YOLO_txt)
+                data_text.close()
+                data_image.save("data/train/{}.png".format(data_idx))
+            # rest of the data is used for testing
+            else:
+                data_text = open("data/test/{}.txt".format(data_idx), "w")
+                data_text.write(YOLO_txt)
+                data_text.close()
+                data_image.save("data/test/{}.png".format(data_idx))
+
+            data_idx += 1
 
 def PrintLoading():
     while data_idx < data_count:
         print("Generating Data... [{}/{}]".format(data_idx+1, data_count), end="\r")
+    print("")
 
 def GenerateDB(background_paths, objects, bg_size, dataset_size):
     global data_count, data_idx
@@ -84,8 +93,8 @@ def GenerateDB(background_paths, objects, bg_size, dataset_size):
         image_paths = glob("{}/out/*.png".format(object["path"]))
         object_data_list.append((object_classes[object_name], image_paths))
 
-    threading.Thread(target=PrintLoading).start()
-
-    for background in backgrounds:
-        GenerateData(background, object_data_list, dataset_size)
-    print("")
+    loading = threading.Thread(target=PrintLoading)
+    loading.start()
+    for init_idx in range(0, THREADS):
+        threading.Thread(target=GenerateData, args=[init_idx, backgrounds, object_data_list, dataset_size]).start()
+    loading.join()

@@ -1,14 +1,15 @@
 {
-    "extensions": [ "png", "jpg", "jpeg", "bmp" ],
+    "extensions": [ "png", "jpg", "jpeg", "bmp", "JPG"],
     "bg_size": [640, 480],
     "objects": [
-        "dog"
+        "bottle"
     ],
-    "dataset_size": 5,
+    "dataset_size": 50,
+    "threads": 8,
     "compile_options": {
-        "GPU": 0,
-        "CUDNN": 0,
-        "CUDNN_HALF": 0,
-        "OPENCV": 0
+        "GPU": 1,
+        "CUDNN": 1,
+        "CUDNN_HALF": 1,
+        "OPENCV": 1
     }
 }
