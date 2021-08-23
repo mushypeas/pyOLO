@@ -1,6 +1,6 @@
 import io
 import json
-import threading
+from threading import Thread, Lock
 import time
 
 from glob import glob
@@ -10,6 +10,7 @@ from rembg.bg import remove
 from PIL import Image, ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
+idx_lock = Lock()
 settings = json.load(open("settings.json", "r"))
 EXTENSIONS = settings["extensions"]
 THREADS = settings["threads"]
@@ -49,7 +50,9 @@ class BackgroundRemover:
             image.save(f'{self.object_path}/out/{image_idx}.png')
 
             image_idx += THREADS
+            idx_lock.acquire()
             self.image_idx += 1
+            idx_lock.release()
 
     def RemoveBackground(self):
         self.CheckImagePath()
@@ -58,10 +61,10 @@ class BackgroundRemover:
         if len(glob(self.object_path + "/out/")) == 0:
             terminal(f"mkdir {self.object_path}/out")
 
-        loading = threading.Thread(target=self.PrintLoading)
+        loading = Thread(target=self.PrintLoading)
         loading.start()
         for i in range(0, THREADS):
-            threading.Thread(target=self._RemoveBackground, args=[i]).start()
+            Thread(target=self._RemoveBackground, args=[i]).start()
             time.sleep(0.3)
         loading.join()
 

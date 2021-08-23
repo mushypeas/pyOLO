@@ -1,11 +1,12 @@
 import json
 import random
-import threading
+from threading import Thread, Lock
 
 from PIL import Image, ImageEnhance
 from glob import glob
 from copy import copy
 
+idx_lock = Lock()
 data_idx = 0
 data_count = 0
 settings = json.load(open("settings.json", "r"))
@@ -25,13 +26,17 @@ def GenerateData(init_idx, backgrounds, object_data_list, dataset_size):
                 object_class = object_data[0]
                 object_file = random.choice(object_data[1])
                 object_image = Image.open(object_file)
-
+                
                 # process chosen object image
                 object_image = ImageEnhance.Brightness(object_image).enhance(random.uniform(0.5, 1.5))
                 object_image = object_image.rotate(random.uniform(0.0, 360.0), expand=True, resample=Image.BICUBIC)
                 object_image = object_image.crop(object_image.getbbox())
-                object_h = int(background_h / random.uniform(3.0, 10.0))
-                object_w = int(object_image.size[0] / object_image.size[1] * object_h)
+                if object_image.size[0] < object_image.size[1]:
+                    object_h = int(background_h / random.uniform(5.0, 8.0))
+                    object_w = int(object_image.size[0] / object_image.size[1] * object_h)
+                else:
+                    object_w = int(background_w / random.uniform(5.0, 8.0))
+                    object_h = int(object_image.size[1] / object_image.size[0] * object_w)
                 object_image = object_image.resize((object_w, object_h)) 
 
                 # make data image
@@ -44,26 +49,27 @@ def GenerateData(init_idx, backgrounds, object_data_list, dataset_size):
                 y_center = round(((offset_h + int(object_h/2)) / background_h), 4)
                 YOLO_width = round((object_w / background_w), 4)
                 YOLO_height = round((object_h / background_h), 4)
-                YOLO_txt += "{} {} {} {} {}\n".format(object_class, x_center, y_center, YOLO_width, YOLO_height)
+                YOLO_txt += f"{object_class} {x_center} {y_center} {YOLO_width} {YOLO_height}\n"
 
             # ~80% of the data is used for training
+            idx_lock.acquire()
             if i / dataset_size < 0.8:
-                data_text = open("data/train/{}.txt".format(data_idx), "w")
+                data_text = open(f"data/train/{data_idx}.txt", "w")
                 data_text.write(YOLO_txt)
                 data_text.close()
-                data_image.save("data/train/{}.png".format(data_idx))
+                data_image.save(f"data/train/{data_idx}.png")
             # rest of the data is used for testing
             else:
-                data_text = open("data/test/{}.txt".format(data_idx), "w")
+                data_text = open(f"data/test/{data_idx}.txt", "w")
                 data_text.write(YOLO_txt)
                 data_text.close()
-                data_image.save("data/test/{}.png".format(data_idx))
-
+                data_image.save(f"data/test/{data_idx}.png")
             data_idx += 1
+            idx_lock.release()
 
 def PrintLoading():
     while data_idx < data_count:
-        print("Generating Data... [{}/{}]".format(data_idx+1, data_count), end="\r")
+        print(f"Generating Data... [{data_idx+1}/{data_count}]", end="\r")
     print("")
 
 def GenerateDB(background_paths, objects, bg_size, dataset_size):
@@ -90,11 +96,11 @@ def GenerateDB(background_paths, objects, bg_size, dataset_size):
             object_classes[object_name] = object_id
             object_id += 1
 
-        image_paths = glob("{}/out/*.png".format(object["path"]))
+        image_paths = glob(f"{object['path']}/out/*.png")
         object_data_list.append((object_classes[object_name], image_paths))
 
-    loading = threading.Thread(target=PrintLoading)
+    loading = Thread(target=PrintLoading)
     loading.start()
     for init_idx in range(0, THREADS):
-        threading.Thread(target=GenerateData, args=[init_idx, backgrounds, object_data_list, dataset_size]).start()
+        Thread(target=GenerateData, args=[init_idx, backgrounds, object_data_list, dataset_size]).start()
     loading.join()
