@@ -1,7 +1,8 @@
 # General
 *.pyc
 *.conv.*
-*.png
+/*.png
+/*.jpg
 *.weights
 *.zip
 *backup
