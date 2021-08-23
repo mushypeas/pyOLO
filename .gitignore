@@ -1,5 +1,9 @@
 *.pyc
 *.conv.*
 *.png
+*.weights
+*.zip
+*backup
+*(copy)
 cache.json
 bad.list
