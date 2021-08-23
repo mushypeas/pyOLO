@@ -1,9 +1,6 @@
 {
     "extensions": [ "png", "jpg", "jpeg", "bmp", "JPG"],
     "bg_size": [640, 480],
-    "objects": [
-        "bottle"
-    ],
     "dataset_size": 50,
     "threads": 8,
     "compile_options": {

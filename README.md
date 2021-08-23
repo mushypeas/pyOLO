@@ -73,11 +73,6 @@ Before runnung pyOLO, you'll have to edit `pyOLO/settings.json`.
 {
     "extensions": [ "png", "jpg", "jpeg", "bmp" ],
     "bg_size": [640, 480],
-    "objects": [
-        "dog",
-        "tuna can",
-        "water bottle"
-    ],
     "dataset_size": 5,
     "threads": 4,
     "compile_options": {
@@ -90,7 +85,6 @@ Before runnung pyOLO, you'll have to edit `pyOLO/settings.json`.
 ```
   - **extensions:** `[ext1, ext2, ...]`The allowed extensions of background/object images. Mostly you would't need to change this.
   - **bg_size:** `[width, height]` Resolution of the background image in pixels. 
-  - **objects:** `["<object name1>", "<object name2>", ...]` List of object names for each object to train.
   - **dataset_size:** Generated YOLO dataset per background. YOLO would train & test with `<dataset_size> * <number of background images>`.
   - **threads:** Number of threads to run Step 1 and Step 2.
   - **compile_options:** Compilation options for YOLO darknet. Use only if you satisfied the requirements.

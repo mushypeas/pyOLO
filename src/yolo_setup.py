@@ -1,22 +1,20 @@
 import json
-import time
 from glob import glob
 
-import subprocess
 from os import system as terminal
-def SetupYOLO():
+def SetupYOLO(objects):
     settings = json.load(open("settings.json","r")) 
     cmp_options = settings['compile_options']
 
     # write data/obj.names
     obj_names = open("data/obj.names", "w")
-    for object in settings["objects"]:
-        obj_names.write(f"{object}\n")
+    for object in objects:
+        obj_names.write(f"{object['name']}\n")
     obj_names.close()
 
     # write data/obj.data
     obj_data = open("data/obj.data", "w")
-    class_num = len(settings["objects"])
+    class_num = len(objects)
     obj_data.write(f"classes= {class_num}\n")
     obj_data.write("train  = data/train.txt\nvalid  = data/test.txt\nnames  = data/obj.names\nbackup = backup\n")
     obj_data.close()

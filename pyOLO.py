@@ -13,11 +13,11 @@ if __name__ == "__main__":
 
     settings = json.load(open("settings.json","r"))
 
-
-    for object_name in settings["objects"]:
+    object_paths = glob("objects/*")
+    for object_path in object_paths:
         object = {}
-        object["name"] = object_name
-        object["path"] = f"objects/{object['name']}"
+        object["name"] = object_path.split("/")[1]
+        object["path"] = object_path
         objects.append(object)
         
     # get image paths
@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     if step in [0,3]:
         print("[Step 3] Setup YOLO Environment")
-        SetupYOLO()
+        SetupYOLO(objects)
         print("[Step 3] Done.")
 
     if step in [0,4]:
