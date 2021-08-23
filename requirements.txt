@@ -1,5 +1,4 @@
 numpy==1.21.1
 Pillow==8.3.1
 termcolor==1.1.0
-requests==2.18.4
-requests-unixsocket==0.1.5
+rembg==1.0.27
