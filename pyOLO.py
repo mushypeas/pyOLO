@@ -4,7 +4,7 @@ from glob import glob
 from os import system as terminal
 
 from src.generate_db import GenerateDB
-from src.image_trimmer import Trim, CheckRequirements
+from src.background_remover import RemoveBackground
 from src.yolo_setup import SetupYOLO
 
 if __name__ == "__main__":
@@ -13,17 +13,11 @@ if __name__ == "__main__":
 
     settings = json.load(open("settings.json","r"))
 
-
-    for object_name in settings["objects"]:
+    object_paths = glob("objects/*")
+    for object_path in object_paths:
         object = {}
-        name_end = object_name.split(" ")[-1]
-        if name_end in ["q", "qm", "s"]:
-            object["name"] = object_name.replace(f" {name_end}", "")
-            object["mode"] =  object_name.split(" ")[-1]
-        else:
-            object["name"] = object_name
-            object["mode"] = "q"
-        object["path"] = f"objects/{object['name']}"
+        object["name"] = object_path.split("/")[1]
+        object["path"] = object_path
         objects.append(object)
         
     # get image paths
@@ -40,35 +34,37 @@ if __name__ == "__main__":
         except ValueError:
             print("Usage 1: python pyOLO.py              <= Run whole process")
             print("Usage 2: python pyOLO.py <step(1-4)>  <= Run single step\n")
-            print("    [Step 1] Trimming images")
+            print("    [Step 1] Preparing Object Images")
             print("    [Step 2] Generating Dataset")
             print("    [Step 3] Setup YOLO Environment")
             print("    [Step 4] Run YOLO training\n")
             exit()
         
     if step in [0,1]:
-        print("[Step 1] Trimming images")
+        print("[Step 1] Preparing Object Images")
 
         # remove all previous data
         terminal("rm -rf objects/*/out/*.png")
 
-        CheckRequirements()
         for object in objects:
-            Trim(object)
+            RemoveBackground(object)
         print("[Step 1] Done.")
 
     if step in [0,2]:
         print("[Step 2] Generating Dataset")
 
         # remove all previous data
-        terminal("rm -rf data/*/*.png data/*/*.txt")
+        terminal('find data/train/ -name "*.png" -delete')
+        terminal('find data/train/ -name "*.txt" -delete')
+        terminal('find data/test/ -name "*.png" -delete')
+        terminal('find data/test/ -name "*.txt" -delete')
 
         GenerateDB(background_paths, objects, settings["bg_size"], settings["dataset_size"])
         print("[Step 2] Done.")
 
     if step in [0,3]:
         print("[Step 3] Setup YOLO Environment")
-        SetupYOLO()
+        SetupYOLO(objects)
         print("[Step 3] Done.")
 
     if step in [0,4]:

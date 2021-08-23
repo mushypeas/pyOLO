@@ -5,7 +5,7 @@ pyOLO is a tool written in Python that helps users train their data with YOLO ea
 `https://github.com/AlexeyAB/darknet.git`
 
 Currently pyOLO mainly consists of 4 steps:
-- Step 1: Trimming Images
+- Step 1: Preparing Object Images
 - Step 2: Generating Dataset
 - Step 3: Setting Up YOLO Environment
 - Step 4: Run YOLO Training
@@ -16,8 +16,6 @@ Currently pyOLO mainly consists of 4 steps:
 - **pip, python virtual environment** for basic environment setup
   - Run `sudo apt install python-pip python-venv` on your terminal to install.
   - You might have to install a specific version of venv, depending on your python version. e.g if you are using python3.9, you might have to run `sudo apt install python-pip python3.9-venv` instead.
-- **ImageMagick** for image trimming
-  - Run `sudo apt install imagemagick` on your terminal to install.
 - **darknet Requirements** check `https://github.com/AlexeyAB/darknet#requirements-for-windows-linux-and-macos`
 
 ## How To Use
@@ -73,32 +71,29 @@ Before runnung pyOLO, you'll have to edit `pyOLO/settings.json`.
 ```json
 # settings.json
 {
-    "extensions": [ "png", "jpg", "jpeg", "bmp" ],
+    "extensions": ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "bmp", "BMP"],
     "bg_size": [640, 480],
-    "objects": [
-        "dog qa"
-        "tuna can"
-        "water bottle s"
-    ],
-    "dataset_size": 5,
+    "dataset_size": 10,
+    "threads": 2,
     "compile_options": {
-        "GPU": 1,
-        "CUDNN": 1,
-        "CUDNN_HALF": 1,
-        "OPENCV": 1
+        "GPU": 0,
+        "CUDNN": 0,
+        "CUDNN_HALF": 0,
+        "OPENCV": 0
     }
 }
 ```
   - **extensions:** `[ext1, ext2, ...]`The allowed extensions of background/object images. Mostly you would't need to change this.
   - **bg_size:** `[width, height]` Resolution of the background image in pixels. 
-  - **objects:** `["<object name> <mode>", ...]` List of objects & trimming mode for each object to train. If the mode isn't given, mode is set to `qa`.
-    - Trimming modes
-      - `q`: Quick Automated Trimming mode. Fast, but only works with white backgrounded images. Currently working on it...
-      - `qm`: Quick Manual Trimming mode(Not recommended).
-      - `s`: Slow Trimming mode. Accurate, but takes 5-8 seconds per image.
   - **dataset_size:** Generated YOLO dataset per background. YOLO would train & test with `<dataset_size> * <number of background images>`.
+  - **threads:** Number of threads to run Step 1 and Step 2.
   - **compile_options:** Compilation options for YOLO darknet. Use only if you satisfied the requirements.
 
+If you don't want settings.json to be on git changes, run
+```
+git update-index --skip-worktree settings.json
+```
+from the project directory.
   
 If it's the first time running pyOLO, just run
 ```

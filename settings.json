@@ -1,10 +1,8 @@
 {
-    "extensions": [ "png", "jpg", "jpeg", "bmp" ],
+    "extensions": ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "bmp", "BMP"],
     "bg_size": [640, 480],
-    "objects": [
-        "dog"
-    ],
-    "dataset_size": 5,
+    "dataset_size": 10,
+    "threads": 2,
     "compile_options": {
         "GPU": 0,
         "CUDNN": 0,
