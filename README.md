@@ -89,6 +89,11 @@ Before runnung pyOLO, you'll have to edit `pyOLO/settings.json`.
   - **threads:** Number of threads to run Step 1 and Step 2.
   - **compile_options:** Compilation options for YOLO darknet. Use only if you satisfied the requirements.
 
+If you don't want settings.json to be on git changes, run
+```
+git update-index --skip-worktree settings.json
+```
+from the project directory.
   
 If it's the first time running pyOLO, just run
 ```
