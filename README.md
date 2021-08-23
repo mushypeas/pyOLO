@@ -71,15 +71,15 @@ Before runnung pyOLO, you'll have to edit `pyOLO/settings.json`.
 ```json
 # settings.json
 {
-    "extensions": [ "png", "jpg", "jpeg", "bmp" ],
+    "extensions": ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "bmp", "BMP"],
     "bg_size": [640, 480],
-    "dataset_size": 5,
-    "threads": 4,
+    "dataset_size": 10,
+    "threads": 2,
     "compile_options": {
-        "GPU": 1,
-        "CUDNN": 1,
-        "CUDNN_HALF": 1,
-        "OPENCV": 1
+        "GPU": 0,
+        "CUDNN": 0,
+        "CUDNN_HALF": 0,
+        "OPENCV": 0
     }
 }
 ```

@@ -1,12 +1,12 @@
 {
-    "extensions": [ "png", "jpg", "jpeg", "bmp", "JPG"],
+    "extensions": ["png", "PNG", "jpg", "JPG", "jpeg", "JPEG", "bmp", "BMP"],
     "bg_size": [640, 480],
-    "dataset_size": 20,
-    "threads": 8,
+    "dataset_size": 10,
+    "threads": 2,
     "compile_options": {
-        "GPU": 1,
-        "CUDNN": 1,
-        "CUDNN_HALF": 1,
-        "OPENCV": 1
+        "GPU": 0,
+        "CUDNN": 0,
+        "CUDNN_HALF": 0,
+        "OPENCV": 0
     }
 }
