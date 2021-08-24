@@ -31,9 +31,9 @@ cd pyOLO
 ```
 python3 -m venv ~/venv/pyOLO
 echo alias pyolo='source ~/venv/pyOLO/bin/activate' >> ~/.bashrc
-pyolo
+pyolov
 ```
-Now, simply running `pyolo` on your terminal will activate your virtual environment. If you want to exit the virtual environment, run `deactivate` on your terminal.
+Now, simply running `pyolov` on your terminal will activate your virtual environment. If you want to exit the virtual environment, run `deactivate` on your terminal.
 - Install the required python libraries by running
 ```
 pip install -r requirements.txt
