@@ -23,7 +23,16 @@ def image_detection(color_image, network, class_names, class_colors, thresh):
     image = darknet.draw_boxes(detections, image_resized, class_colors)
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB), detections
 
-def run_yolo():
+# yolo testing using images in a given path
+def test_yolo_ii():
+    pass
+
+# yolo testing using images in data/test
+def test_yolo_it():
+    pass
+
+# yolo testing using realsense
+def test_yolo_rs():
     random.seed(3)  # deterministic bbox colors
     network, class_names, class_colors = darknet.load_network(
         "data/obj.cfg",
@@ -54,3 +63,11 @@ def run_yolo():
 
         cv2.imshow('Inference', image)
         cv2.waitKey(3)
+
+def test_yolo(mode):
+    if mode == "rs":
+        test_yolo_rs()
+    elif mode == "it":
+        test_yolo_it()
+    elif mode == "ii":
+        test_yolo_ii()

@@ -6,9 +6,7 @@ from os import system as terminal
 from src.generate_db import generate_db
 from src.background_remover import remove_background
 from src.yolo_setup import setup_yolo
-from src import yolo_test_rs as rs
-from src import yolo_test_it as it
-from src import yolo_test_ii as ii
+from src.yolo_test import test_yolo
 
 MAX_STEPS = 5
 
@@ -87,14 +85,12 @@ if __name__ == "__main__":
     if step in [0,5]:
         print("[Step 5] Run YOLO Testing")
         while True:
-            mode = input("Select type of testing(rs/it/ii):\nrs: Test realtime videos using realsense\nit: Test test images in data/test\nii: Test image at a given path\n>> ").lower()
-            if mode == "rs":
-                rs.run_yolo()
-            elif mode == "it":
-                it.run_yolo()
-                break
-            elif mode == "ii":
-                ii.run_yolo()
+            mode = input("Select type of testing(rs/it/ii):\n\n\
+    rs: Test realtime videos using realsense\n\
+    it: Test images in data/test\n\
+    ii: Test image at a given path\n\n>> ").lower()
+            if mode in ["rs", "it", "ii"]:
+                test_yolo(mode)
                 break
             else:
                 print("Wrong testing mode, try again.")
