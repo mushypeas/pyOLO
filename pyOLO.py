@@ -6,7 +6,9 @@ from os import system as terminal
 from src.generate_db import generate_db
 from src.background_remover import remove_background
 from src.yolo_setup import setup_yolo
-from src.yolo_test_rs import run_yolo
+from src import yolo_test_rs as rs
+from src import yolo_test_it as it
+from src import yolo_test_ii as ii
 
 MAX_STEPS = 5
 
@@ -36,7 +38,7 @@ if __name__ == "__main__":
                 raise ValueError
         except ValueError:
             print("Usage 1: python pyOLO.py              <= Run whole process")
-            print("Usage 2: python pyOLO.py <step(1-4)>  <= Run single step\n")
+            print(f"Usage 2: python pyOLO.py <step(1-{MAX_STEPS})>  <= Run single step\n")
             print("    [Step 1] Preparing Object Images")
             print("    [Step 2] Generating Dataset")
             print("    [Step 3] Setup YOLO Environment")
@@ -84,4 +86,15 @@ if __name__ == "__main__":
 
     if step in [0,5]:
         print("[Step 5] Run YOLO Testing")
-        run_yolo()
+        while True:
+            mode = input("Select type of testing(rs/it/ii):\nrs: Test realtime videos using realsense\nit: Test test images in data/test\nii: Test image at a given path\n>> ").lower()
+            if mode == "rs":
+                rs.run_yolo()
+            elif mode == "it":
+                it.run_yolo()
+                break
+            elif mode == "ii":
+                ii.run_yolo()
+                break
+            else:
+                print("Wrong testing mode, try again.")
