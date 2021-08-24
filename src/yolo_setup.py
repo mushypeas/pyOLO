@@ -1,3 +1,4 @@
+import os
 import json
 from glob import glob
 
@@ -16,7 +17,11 @@ def SetupYOLO(objects):
     obj_data = open("data/obj.data", "w")
     class_num = len(objects)
     obj_data.write(f"classes= {class_num}\n")
-    obj_data.write("train  = data/train.txt\nvalid  = data/test.txt\nnames  = data/obj.names\nbackup = backup\n")
+    train_path = os.path.abspath("data/train.txt")
+    test_path = os.path.abspath("data/test.txt")
+    names_path = os.path.abspath("data/obj.names")
+    backup_path = os.path.abspath("backup")
+    obj_data.write(f"train  = {train_path}\nvalid  = {test_path}\nnames  = {names_path}\nbackup = {backup_path}\n")
     obj_data.close()
 
     # write data/test.txt
