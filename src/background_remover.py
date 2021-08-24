@@ -24,7 +24,7 @@ class BackgroundRemover:
         self.image_count = 0
         self.image_idx = 0
 
-    def CheckImagePath(self):
+    def check_imagepath(self):
         for extension in EXTENSIONS:
             self.image_paths += glob(self.object_path + "/*" + extension)
 
@@ -34,7 +34,7 @@ class BackgroundRemover:
             exit()
         self.image_count = len(self.image_paths)
 
-    def _RemoveBackground(self, image_idx):
+    def _remove_background(self, image_idx):
         if self.image_idx >= self.image_count:
             exit()
         for idx in range(image_idx, self.image_count, THREADS):
@@ -54,24 +54,24 @@ class BackgroundRemover:
             self.image_idx += 1
             idx_lock.release()
 
-    def RemoveBackground(self):
-        self.CheckImagePath()
+    def remove_background(self):
+        self.check_imagepath()
         print("Current object:", colored(self.object_name, "green"))
 
         if len(glob(self.object_path + "/out/")) == 0:
             terminal(f"mkdir {self.object_path}/out")
 
-        loading = Thread(target=self.PrintLoading)
+        loading = Thread(target=self.print_loading)
         loading.start()
         for i in range(0, THREADS):
-            Thread(target=self._RemoveBackground, args=[i]).start()
+            Thread(target=self._remove_background, args=[i]).start()
             time.sleep(0.3)
         loading.join()
 
-    def PrintLoading(self):
+    def print_loading(self):
         while self.image_idx < self.image_count:
             print(f"Converting images from '{self.object_path}'... [{self.image_idx+1}/{self.image_count}]", end="\r")
         print("")
 
-def RemoveBackground(object):
-    BackgroundRemover(object).RemoveBackground()
+def remove_background(object):
+    BackgroundRemover(object).remove_background()

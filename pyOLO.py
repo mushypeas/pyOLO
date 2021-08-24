@@ -3,8 +3,8 @@ import json
 from glob import glob
 from os import system as terminal
 
-from src.generate_db import GenerateDB
-from src.background_remover import RemoveBackground
+from src.generate_db import generate_db
+from src.background_remover import remove_background
 from src.yolo_setup import setup_yolo
 from src.yolo_test_rs import run_yolo
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         terminal("rm -rf objects/*/out/*.png")
 
         for object in objects:
-            RemoveBackground(object)
+            remove_background(object)
         print("[Step 1] Done.")
 
     if step in [0,2]:
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         terminal('find data/test/ -name "*.png" -delete')
         terminal('find data/test/ -name "*.txt" -delete')
 
-        GenerateDB(background_paths, objects, settings["bg_size"], settings["dataset_size"])
+        generate_db(background_paths, objects, settings["bg_size"], settings["dataset_size"])
         print("[Step 2] Done.")
 
     if step in [0,3]:

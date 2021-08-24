@@ -12,7 +12,7 @@ data_count = 0
 settings = json.load(open("settings.json", "r"))
 THREADS = settings["threads"]
 
-def GenerateData(init_idx, backgrounds, object_data_list, dataset_size):
+def generate_data(init_idx, backgrounds, object_data_list, dataset_size):
     global data_idx
 
     for bg_idx in range(init_idx, len(backgrounds), THREADS):
@@ -67,12 +67,12 @@ def GenerateData(init_idx, backgrounds, object_data_list, dataset_size):
             data_idx += 1
             idx_lock.release()
 
-def PrintLoading():
+def print_loading():
     while data_idx < data_count:
         print(f"Generating Data... [{data_idx+1}/{data_count}]", end="\r")
     print("")
 
-def GenerateDB(background_paths, objects, bg_size, dataset_size):
+def generate_db(background_paths, objects, bg_size, dataset_size):
     global data_count, data_idx
 
     print("Loading Images...")
@@ -99,8 +99,8 @@ def GenerateDB(background_paths, objects, bg_size, dataset_size):
         image_paths = glob(f"{object['path']}/out/*.png")
         object_data_list.append((object_classes[object_name], image_paths))
 
-    loading = Thread(target=PrintLoading)
+    loading = Thread(target=print_loading)
     loading.start()
     for init_idx in range(0, THREADS):
-        Thread(target=GenerateData, args=[init_idx, backgrounds, object_data_list, dataset_size]).start()
+        Thread(target=generate_data, args=[init_idx, backgrounds, object_data_list, dataset_size]).start()
     loading.join()
