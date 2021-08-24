@@ -5,7 +5,10 @@ from os import system as terminal
 
 from src.generate_db import GenerateDB
 from src.background_remover import RemoveBackground
-from src.yolo_setup import SetupYOLO
+from src.yolo_setup import setup_yolo
+from src.yolo_test_rs import run_yolo
+
+MAX_STEPS = 5
 
 if __name__ == "__main__":
     background_paths = []
@@ -29,7 +32,7 @@ if __name__ == "__main__":
     else:
         try:
             step = int(sys.argv[1])
-            if step < 1 or step > 4:
+            if step < 1 or step > MAX_STEPS:
                 raise ValueError
         except ValueError:
             print("Usage 1: python pyOLO.py              <= Run whole process")
@@ -37,7 +40,8 @@ if __name__ == "__main__":
             print("    [Step 1] Preparing Object Images")
             print("    [Step 2] Generating Dataset")
             print("    [Step 3] Setup YOLO Environment")
-            print("    [Step 4] Run YOLO training\n")
+            print("    [Step 4] Run YOLO Training\n")
+            print("    [Step 5] Run YOLO Testing\n")
             exit()
         
     if step in [0,1]:
@@ -64,11 +68,11 @@ if __name__ == "__main__":
 
     if step in [0,3]:
         print("[Step 3] Setup YOLO Environment")
-        SetupYOLO(objects)
+        setup_yolo(objects)
         print("[Step 3] Done.")
 
     if step in [0,4]:
-        print("[Step 4] Run YOLO training")
+        print("[Step 4] Run YOLO Training")
 
         # start training from the last weights if possible
         weights = glob("backup/obj_last.weights")
@@ -77,3 +81,7 @@ if __name__ == "__main__":
         else:
             terminal("darknet/darknet detector train data/obj.data data/obj.cfg darknet/darknet19_448.conv.23")
         print("[Step 4] Done.")
+
+    if step in [0,5]:
+        print("[Step 5] Run YOLO Testing")
+        run_yolo()

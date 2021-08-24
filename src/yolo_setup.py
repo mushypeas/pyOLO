@@ -3,7 +3,8 @@ import json
 from glob import glob
 
 from os import system as terminal
-def SetupYOLO(objects):
+
+def setup_yolo(objects):
     settings = json.load(open("settings.json","r")) 
     cmp_options = settings['compile_options']
 
@@ -52,32 +53,11 @@ def SetupYOLO(objects):
 
     cfg_lines = open("data/yolov3.cfg", "r").readlines()
     obj_cfg = open("data/obj.cfg", "w")
-
-    # AlexeyAB version
-
     filter_num = (class_num+5)*5
     cfg_lines[3]   = f"height={settings['bg_size'][1]}\n"
     cfg_lines[4]   = f"width={settings['bg_size'][0]}\n"
     cfg_lines[223] = f"filters={filter_num}\n"
     cfg_lines[229] = f"classes={class_num}\n"
-
-    # pjreddie version
-
-    # max_batches = max(class_num, 2)*2000
-    # step1 = int(max_batches*0.8)
-    # step2 = int(max_batches*0.9)
-    # filter_num = (class_num+5)*3
-    # cfg_lines[7]   = f"width={settings['bg_size'][0]}\n"
-    # cfg_lines[8]   = f"height={settings['bg_size'][1]}\n"
-    # cfg_lines[19]  = f"max_batches={max_batches}\n"
-    # cfg_lines[21]  = f"steps={step1},{step2}\n"
-    # cfg_lines[602] = f"filters={filter_num}\n"
-    # cfg_lines[609] = f"classes={class_num}\n"
-    # cfg_lines[688] = f"filters={filter_num}\n"
-    # cfg_lines[695] = f"classes={class_num}\n"
-    # cfg_lines[775] = f"filters={filter_num}\n"
-    # cfg_lines[782] = f"classes={class_num}\n"
-
     obj_cfg.writelines(cfg_lines)
     obj_cfg.close()
 
