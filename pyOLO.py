@@ -93,4 +93,4 @@ if __name__ == "__main__":
                 test_yolo(mode)
                 break
             else:
-                print("Wrong testing mode, try again.")
+                print("Invalid testing mode.")
