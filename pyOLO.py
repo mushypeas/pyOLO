@@ -69,9 +69,11 @@ if __name__ == "__main__":
 
     if step in [0,4]:
         print("[Step 4] Run YOLO training")
-        weights = glob("darknet/backup/*.weights")
+
+        # start training from the last weights if possible
+        weights = glob("backup/obj_last.weights")
         if len(weights) > 0:
-            terminal(f"darknet/darknet detector train data/obj.data data/obj.cfg {weights[0]}")
+            terminal("darknet/darknet detector train data/obj.data data/obj.cfg backup/obj_last.weights")
         else:
             terminal("darknet/darknet detector train data/obj.data data/obj.cfg darknet/darknet19_448.conv.23")
         print("[Step 4] Done.")
