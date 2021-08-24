@@ -4,12 +4,12 @@
 pyOLO is a tool written in Python that helps users train their data with YOLO easily. All you need is some initial setup and your images for training! This project cotains a darknet model cloned from:
 `https://github.com/AlexeyAB/darknet.git`
 
-Currently pyOLO mainly consists of 4 steps:
+Currently pyOLO mainly consists of 5 steps:
 - Step 1: Preparing Object Images
 - Step 2: Generating Dataset
 - Step 3: Setting Up YOLO Environment
 - Step 4: Run YOLO Training
-- (TODO, maybe) Step 5: Run YOLO Testing
+- Step 5: Run YOLO Testing
 
 ## Requirements
 - **Linux** (Tested on: Ubuntu 18.04)
@@ -83,9 +83,9 @@ Before runnung pyOLO, you'll have to edit `pyOLO/settings.json`.
     }
 }
 ```
-  - **extensions:** `[ext1, ext2, ...]`The allowed extensions of background/object images. Mostly you would't need to change this.
+  - **extensions:** `[ext1, ext2, ...]`The allowed extensions of background/object images. Add more extensions if necessary - it will work as long as the Python [Pillow library](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html#fully-supported-formats) supports it.
   - **bg_size:** `[width, height]` Resolution of the background image in pixels. 
-  - **dataset_size:** Generated YOLO dataset per background. YOLO would train & test with `<dataset_size> * <number of background images>`.
+  - **dataset_size:** Generated YOLO dataset per background. YOLO would train & test with `<dataset_size> * <number of background images>` images.
   - **threads:** Number of threads to run Step 1 and Step 2.
   - **compile_options:** Compilation options for YOLO darknet. Use only if you satisfied the requirements.
 
@@ -99,4 +99,17 @@ If it's the first time running pyOLO, just run
 ```
 python pyOLO.py
 ```
-from the project root directory.
+from the project root directory. You could also run the process step by step by giving the step number as a argument:
+```
+python pyOLO.py <1-5>
+```
+- Step 1: Preparing Object Images
+
+- Step 2: Generating Dataset
+
+- Step 3: Setting Up YOLO Environment
+
+- Step 4: Run YOLO Training
+
+- Step 5: Run YOLO Testing
+  
