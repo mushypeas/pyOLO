@@ -30,7 +30,7 @@ cd pyOLO
 - Make & activate a virtual environment. If you don't know how, just run the following lines:
 ```
 python3 -m venv ~/venv/pyOLO
-echo alias pyolo='source ~/venv/pyOLO/bin/activate' >> ~/.bashrc
+echo alias pyolov='source ~/venv/pyOLO/bin/activate' >> ~/.bashrc
 pyolov
 ```
 Now, simply running `pyolov` on your terminal will activate your virtual environment. If you want to exit the virtual environment, run `deactivate` on your terminal.
