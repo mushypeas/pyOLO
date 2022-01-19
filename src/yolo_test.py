@@ -8,10 +8,11 @@ import pyrealsense2 as rs
 from glob import glob
 from PIL import Image
 
-from . import darknet
+# from . import darknet
+import darknet
 
-# yolo image detection threshold vlaue
-THRESHOLD = 0.25
+# yolo image detection threshold value
+THRESHOLD = 0.40
 
 def image_detection(color_image, darknet_network, thresh, is_realsense):
     # Darknet doesn't accept numpy images.
@@ -92,9 +93,9 @@ def test_yolo_rs(network):
 def test_yolo(mode):
     random.seed(3)  # deterministic bbox colors
     network = darknet.load_network(
-        "data/obj.cfg",
-        "data/obj.data",
-        "backup/obj_last.weights",
+        "../data/obj.cfg",
+        "../data/obj.data",
+        "../backup/obj_10000.weights",
         batch_size=1
     )
     if mode == "rs":
@@ -103,3 +104,6 @@ def test_yolo(mode):
         test_yolo_it(network)
     elif mode == "ii":
         test_yolo_ii(network)
+
+if __name__ == '__main__':
+    test_yolo('rs')

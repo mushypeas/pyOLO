@@ -28,14 +28,14 @@ def generate_data(init_idx, backgrounds, object_data_list, dataset_size):
                 object_image = Image.open(object_file)
                 
                 # process chosen object image
-                object_image = ImageEnhance.Brightness(object_image).enhance(random.uniform(0.5, 1.5))
+                object_image = ImageEnhance.Brightness(object_image).enhance(random.uniform(0.5, 2.0))
                 object_image = object_image.rotate(random.uniform(0.0, 360.0), expand=True, resample=Image.BICUBIC)
                 object_image = object_image.crop(object_image.getbbox())
                 if object_image.size[0] < object_image.size[1]:
-                    object_h = int(background_h / random.uniform(5.0, 8.0))
+                    object_h = int(background_h / random.uniform(5.0, 12.0))
                     object_w = int(object_image.size[0] / object_image.size[1] * object_h)
                 else:
-                    object_w = int(background_w / random.uniform(5.0, 8.0))
+                    object_w = int(background_w / random.uniform(5.0, 12.0))
                     object_h = int(object_image.size[1] / object_image.size[0] * object_w)
                 object_image = object_image.resize((object_w, object_h)) 
 
@@ -51,9 +51,9 @@ def generate_data(init_idx, backgrounds, object_data_list, dataset_size):
                 YOLO_height = round((object_h / background_h), 4)
                 YOLO_txt += f"{object_class} {x_center} {y_center} {YOLO_width} {YOLO_height}\n"
 
-            # ~80% of the data is used for training
+            # ~99% of the data is used for training
             idx_lock.acquire()
-            if i / dataset_size < 0.8:
+            if i / dataset_size < 0.95:
                 data_text = open(f"data/train/{data_idx}.txt", "w")
                 data_text.write(YOLO_txt)
                 data_text.close()
@@ -72,6 +72,7 @@ def print_loading():
         print(f"Generating Data... [{data_idx+1}/{data_count}]", end="\r")
     print("")
 
+# Generate dataset from given background images and object images
 def generate_db(background_paths, objects, bg_size, dataset_size):
     global data_count, data_idx
 
